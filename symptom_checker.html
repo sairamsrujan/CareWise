@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareWise - Symptom Checker</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f4f4f9, #e0e0f5);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: #4CAF50;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            animation: fadeInDown 1s ease-in-out;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #d1ffd6;
+            transform: translateY(-3px);
+        }
+
+        /* Symptom Checker Page */
+        .symptom-checker {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 1.5s ease-in-out;
+        }
+
+        .symptom-checker h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            animation: slideInLeft 1s ease-in-out;
+        }
+
+        .symptom-checker p {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 2rem;
+            animation: slideInLeft 1.2s ease-in-out;
+        }
+
+        .symptom-form {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .symptom-form input {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .symptom-form input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .symptom-form button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .symptom-form button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 1rem;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .result-card {
+            background-color: #e8f5e9;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 1rem;
+            animation: slideInUp 0.5s ease-in-out;
+        }
+
+        .guide {
+            margin-top: 2rem;
+        }
+
+        .guide h2 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .guide ol {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            50% {
+                transform: translateX(10px);
+            }
+            75% {
+                transform: translateX(-10px);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">CareWise 🏥</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="symptom_checker.html">Symptom Checker</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="symptom-checker">
+        <h1>Symptom Checker 🔍</h1>
+        <p>Enter your symptoms below and get instant analysis.</p>
+        <form class="symptom-form">
+            <input type="text" id="symptoms" placeholder="Enter your symptoms (e.g., fever, headache)" required>
+            <button type="submit">Analyze Symptoms</button>
+        </form>
+
+        <p id="error-message" class="error-message"></p>
+
+        <div id="result-card" class="result-card">
+            <h2>Analysis Results</h2>
+            <p id="analysis-result">No analysis available.</p>
+            <p><strong>Urgency Level:</strong> <span id="urgency-level">Unknown</span></p>
+        </div>
+
+        <!-- Step-by-Step Guide -->
+        <div class="guide">
+            <h2>How to Use the Symptom Checker</h2>
+            <ol>
+                <li>Enter your symptoms in the input box above.</li>
+                <li>Click "Analyze Symptoms" to get instant results.</li>
+                <li>Review the analysis and follow the provided advice.</li>
+                <li>If symptoms persist, consult a healthcare professional.</li>
+            </ol>
+        </div>
+    </main>
+
+    <script>
+        document.querySelector(".symptom-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const symptoms = document.getElementById("symptoms").value.trim().toLowerCase();
+            const resultText = document.getElementById("analysis-result");
+            const urgencyText = document.getElementById("urgency-level");
+            const errorMessage = document.getElementById("error-message");
+    
+            if (symptoms) {
+                errorMessage.textContent = "";
+                resultText.textContent = "Analyzing symptoms...";
+                urgencyText.textContent = "Loading...";
+    
+                setTimeout(() => {
+                    let analysis = "No specific diagnosis available.";
+                    let urgency = "Unknown";
+    
+                    // Symptom analysis
+                    if (symptoms.includes("fever")) {
+                        analysis = "You may have a viral infection or flu. Stay hydrated and rest.";
+                        urgency = "Low";
+                    } else if (symptoms.includes("heart attack")) {
+                        analysis = "Seek immediate medical attention! Possible heart attack symptoms.";
+                        urgency = "High";
+                    } else if (symptoms.includes("covid")) {
+                        analysis = "Possible COVID-19 symptoms. Get tested and isolate if necessary.";
+                        urgency = "Medium";
+                    } else if (symptoms.includes("diarrhea")) {
+                        analysis = "You may have food poisoning or a stomach infection. Stay hydrated.";
+                        urgency = "Medium";
+                    } else if (symptoms.includes("typhoid")) {
+                        analysis = "Possible typhoid fever. Consult a doctor for testing and treatment.";
+                        urgency = "Medium";
+                    } else if (symptoms.includes("fits") || symptoms.includes("seizure")) {
+                        analysis = "Seizure detected. Seek medical help immediately.";
+                        urgency = "High";
+                    } else if (symptoms.includes("cold") || symptoms.includes("cough")) {
+                        analysis = "Common cold or respiratory infection. Rest and drink warm fluids.";
+                        urgency = "Low";
+                    }
+    
+                    resultText.textContent = analysis;
+                    urgencyText.textContent = urgency;
+                }, 2000);
+            } else {
+                errorMessage.textContent = "Please enter valid symptoms.";
+            }
+        });
+    </script>
+    
+</body>
+</html>
